@@ -28,6 +28,13 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
+          {/* Opens the Ask Copper panel. Phones use the floating button instead. */}
+          <a
+            href="#ask"
+            className="text-primary hidden rounded-md px-2 py-1 text-sm font-semibold whitespace-nowrap transition-colors hover:underline sm:inline-block"
+          >
+            Ask Copper
+          </a>
           <ModeToggle />
         </nav>
       </div>

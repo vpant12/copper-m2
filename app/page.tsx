@@ -5,6 +5,8 @@ import { ProductsSection } from "@/components/copper/landing/products-section";
 import { Showcase } from "@/components/copper/landing/showcase";
 import { SiteFooter } from "@/components/copper/site-footer";
 import { SiteHeader } from "@/components/copper/site-header";
+import { AskCopper } from "@/components/copper/ask-copper";
+import { isAiConfigured } from "@/lib/ai/call";
 import { getPlans, getPrivacySummary, getProducts } from "@/lib/copper/catalog";
 
 export default function Home() {
@@ -20,6 +22,8 @@ export default function Home() {
         <PrivacySummary privacy={getPrivacySummary()} />
       </main>
       <SiteFooter />
+      {/* The key is a server-only variable, so check it here and pass it down. */}
+      <AskCopper aiConfigured={isAiConfigured()} />
     </>
   );
 }

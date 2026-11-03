@@ -24,7 +24,12 @@ export type ProductList = {
 
 export type Prices = {
   products: { id: ProductId; name: string; priceUsd: number }[];
-  plans: { id: Plan["id"]; name: string; monthlyUsd: number; annualUsd: number }[];
+  plans: {
+    id: Plan["id"];
+    name: string;
+    monthlyUsd: number;
+    annualUsd: number;
+  }[];
 };
 
 export type CalculateCostInput = {
@@ -144,7 +149,9 @@ export const checkAvailabilityInput: z.ZodType<CheckAvailabilityInput> =
     color: z
       .string()
       .optional()
-      .describe("One color name, in any capitalization. Leave out for every color."),
+      .describe(
+        "One color name, in any capitalization. Leave out for every color.",
+      ),
   });
 
 function stockOf(units: number): Stock {

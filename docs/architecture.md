@@ -62,6 +62,35 @@ Don't mix these up:
 - **No authentication or row-level security yet.** They arrive in a later
   module.
 
+## Module 2: Ask Copper
+
+**Summary:** A floating chat panel that answers price, cost and stock
+questions by calling four read-only tools, and shows each step (thinking, tool
+calls, results) as the answer streams in.
+
+| Piece | Where | What it does |
+|---|---|---|
+| Page / route | `app/page.tsx` | Mounts `<AskCopper />` and passes `isAiConfigured()` down. No new routes |
+| Components | `components/copper/ask-copper.tsx`, `site-header.tsx` | Launcher, side sheet, Use tools switch, the rail of stations and tool cards; header link to `#ask` |
+| Server Action | `lib/copper/assistant/ask.ts` | `askCopper({ messages, useTools })` returns a live `Progress` and reads `fullStream` in the background |
+| Tools | `lib/copper/assistant/tools.ts` | `get_products`, `get_prices`, `calculate_cost`, `check_availability`; prices from the catalog, stock from `readInventory()` on every call |
+| Instructions | `lib/copper/assistant/instructions.ts` | `COPPER_INSTRUCTIONS`, sent only when tools are on |
+| AI calls | `lib/ai/call.ts` (`callStream`, module 2, feature `ask-copper`) | Default Gemini model, up to 5 steps, with thought summaries. One `[ai_calls]` row per question |
+
+**Data flow:** shopper asks → panel calls `askCopper` with that conversation's
+history → `callStream` → model picks tools → tools read catalog / stock →
+model writes the reply → each change is pushed to the panel as a fresh
+`Progress` copy.
+
+**Decisions and trade-offs:** Tools on and off are separate conversations, so
+the tools-off model can't copy an answer the tools worked out. With tools off
+the model gets no instructions either, since "always use your tools" with no
+tools makes it return nothing. The tools only read; they can't change anything.
+
+**Risks and open questions:** With tools off the model invents prices; the
+panel labels those answers "may be made up". Cost is one streamed call per
+question, logged to `ai_calls`. Stock moves to Supabase in part 2.
+
 ## Adding a module
 
 When a module changes how the app fits together, add a section here:

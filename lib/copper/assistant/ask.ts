@@ -53,7 +53,9 @@ async function streamAnswer(
   });
   const update = () => progress.update(snapshot("working"));
   const toolStep = (id: string) =>
-    steps.find((step): step is ToolStep => step.type === "tool" && step.id === id);
+    steps.find(
+      (step): step is ToolStep => step.type === "tool" && step.id === id,
+    );
 
   try {
     const history = messages.map(({ role, content }) => ({ role, content }));
@@ -116,7 +118,9 @@ async function streamAnswer(
           const step = toolStep(part.toolCallId);
           if (step) {
             step.output =
-              part.error instanceof Error ? part.error.message : String(part.error);
+              part.error instanceof Error
+                ? part.error.message
+                : String(part.error);
             step.state = "error";
           }
           break;
