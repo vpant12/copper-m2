@@ -1,10 +1,10 @@
-# Architecture
+﻿# Architecture
 
 How the Copper State Labs app fits together. Each module adds a section at the
 end (see [Adding a module](#adding-a-module)) when it changes how the app
 works: new pages, tables or AI calls.
 
-_Fictional — for educational use._
+_Fictional â€” for educational use._
 
 ## The starter app (Module 0)
 
@@ -77,9 +77,9 @@ calls, results) as the answer streams in.
 | Instructions | `lib/copper/assistant/instructions.ts` | `COPPER_INSTRUCTIONS`, sent only when tools are on |
 | AI calls | `lib/ai/call.ts` (`callStream`, module 2, feature `ask-copper`) | Default Gemini model, up to 5 steps, with thought summaries. One `[ai_calls]` row per question |
 
-**Data flow:** shopper asks → panel calls `askCopper` with that conversation's
-history → `callStream` → model picks tools → tools read catalog / stock →
-model writes the reply → each change is pushed to the panel as a fresh
+**Data flow:** shopper asks â†’ panel calls `askCopper` with that conversation's
+history â†’ `callStream` â†’ model picks tools â†’ tools read catalog / stock â†’
+model writes the reply â†’ each change is pushed to the panel as a fresh
 `Progress` copy.
 
 **Decisions and trade-offs:** Tools on and off are separate conversations, so
@@ -89,7 +89,7 @@ tools makes it return nothing. The tools only read; they can't change anything.
 
 **Risks and open questions:** With tools off the model invents prices; the
 panel labels those answers "may be made up". Cost is one streamed call per
-question, logged to `ai_calls`. Stock moves to Supabase in part 2.
+question, logged to `ai_calls`. Stock now lives in the Supabase `inventory` table (part 2), read fresh by `readInventory()`.
 
 ## Adding a module
 
@@ -107,7 +107,7 @@ When a module changes how the app fits together, add a section here:
 | Data | `lib/copper/data/...` | Data files added |
 | AI calls | `lib/ai/call.ts` (module, feature) | Model, prompt purpose, expected cost per call |
 
-**Data flow:** user action → page → server code → database / model → response.
+**Data flow:** user action â†’ page â†’ server code â†’ database / model â†’ response.
 
 **Decisions and trade-offs:** what you chose, the alternatives, and why.
 
